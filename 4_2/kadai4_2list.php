@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>フォーム画面</title>
+<title>リスト一覧</title>
 <meta charset="utf-8">
 </head>
 <body>
 
 <?php
-	header("Content-Type: text/html; charset=UTF-8");
+	//データベース呼び出し
+	require_once 'db4_2.php';
 
-	$link = mysql_connect("localhost","root","");
-	mysql_query("SET NAMES utf8",$link);
-	if (!$link) {
-		die("接続できませんでした" .mysql_error());
-	}
-
-	$db = mysql_select_db("lesson" , $link);
-	if (!$db)
-	{
-		die("データベース接続エラーです。" .mysql_error());
-	}
+	//検索結果の全体表示
+	print <<<EOT
+	<table border='1'>
+	<tr>
+	<th>全国地方公共団体コード</th>
+	<th>旧郵便番号</th>
+	<th>郵便番号</th>
+	<th>都道府県名(半角カタカナ)</th>
+	<th>市区町村名(半角カタカナ)</th>
+	<th>町域名(半角カタカナ)</th>
+	<th>都道府県名(漢字)</th>
+	<th>市区町村名(漢字)</th>
+	<th>町域名(漢字)</th>
+	<th>一町域で複数の郵便番号か</th>
+	<th>小字毎に番地が起番されている町域か</th>
+	<th>丁目を有する町域名か</th>
+	<th>一郵便番号で複数の町域か</th>
+	<th>更新確認</th>
+	<th>更新理由</th>
+	</tr>
+EOT;
 
 	$result = mysql_query("SELECT * FROM kadai_kida_ziplist");
 	if (!$result)
@@ -27,13 +38,7 @@
 		echo("SQL失敗");
 	}
 
-	 //検索結果の全体表示
-	print <<<EOT
-	<table border='1'>
-	<tr>
-	<th>全国地方公共団体コード</th><th>旧郵便番号</th><th>郵便番号</th><th>都道府県名(半角カタカナ)</th><th>市区町村名(半角カタカナ)</th><th>町域名(半角カタカナ)</th><th>都道府県名(漢字)</th><th>市区町村名(漢字)</th><th>町域名(漢字)</th><th>一町域で複数の郵便番号か</th><th>小字毎に番地が起番されている町域か</th><th>丁目を有する町域名か</th><th>一郵便番号で複数の町域か</th><th>更新確認</th><th>更新理由</th>
-	</tr>
-EOT;
+	var_dump($result);
 
 	while ($row = mysql_fetch_array($result))
 	{
@@ -138,10 +143,6 @@ EOT;
 	//mysql_close($link) ;
 
 ?>
-
-<form action="kadai4_1input.php" method="post">
-<input type="submit" value="追加入力">
-</form>
 
 <form action="kadai4_2search.php" method="post">
 <input type="submit" value="詳細検索">
