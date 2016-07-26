@@ -1,19 +1,28 @@
+<?php
+//データベース呼び出し
+require_once 'db4_4.php';
+$result = mysql_query("SELECT * FROM kadai_kida_ziplist");
+if (!$result)
+{
+	echo("SQL失敗");
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
+<META HTTP-EQUIV="Content-Script-Type" CONTENT="text/javascript">
+<TITLE>チェックボックスを全チェックON/OFFとする方法</TITLE>
+
 <title>リスト一覧</title>
 <meta charset="utf-8">
 </head>
 <body>
-
 <?php
-	//データベース呼び出し
-	require_once 'db4_3.php';
-
 	//検索結果の全体表示
 	print <<<EOT
 	<table border='1'>
 	<tr>
+	<th>削除選択☑</th>
 	<th>全国地方公共団体コード</th>
 	<th>旧郵便番号</th>
 	<th>郵便番号</th>
@@ -31,27 +40,26 @@
 	<th>更新理由</th>
 	</tr>
 EOT;
+	?>
 
-	$result = mysql_query("SELECT * FROM kadai_kida_ziplist");
-	if (!$result)
-	{
-		echo("SQL失敗");
-	}
+<form name="nForm" action="kadai4_4deletecheck.php" method="post">
+	<?php
 
 	while ($row = mysql_fetch_array($result))
 	{
 		$ZC = $row["zip_code"];
-		$Zlink = "<a href='http://http://dev3.m-craft.com/kida/mc-kadai/4_3/kadai4_3list.php?data=$ZC'>".$row["zip_code"]."</a>";
+		$Zlink = "<a href='http://localhost/kadai/kadai_4/4_3/kadai4_3update.php?data=$ZC'>".$row["zip_code"]."</a>";
 		print"<tr>";
-		echo'<td>' .$row["public_group_code"] .'</td>';
-		echo'<td>' .$row["zip_code_old"] .'</td>';
-		echo'<td>' .$Zlink .'</td>';
-		echo'<td>' .$row["prefecture_kana"] .'</td>';
-		echo'<td>' .$row["city_kana"] .'</td>';
-		echo'<td>' .$row["town_kana"] .'</td>';
-		echo'<td>' .$row["prefecture"] .'</td>';
-		echo'<td>' .$row["city"] .'</td>';
-		echo'<td>' .$row["town"] .'</td>';
+		print'<td>'."<input type='checkbox' name='selectrow' value='$ZC'>".'</td>';  //☑設置
+		print'<td>' .$row["public_group_code"] .'</td>';
+		print'<td>' .$row["zip_code_old"] .'</td>';
+		print'<td>' .$Zlink .'</td>';
+		print'<td>' .$row["prefecture_kana"] .'</td>';
+		print'<td>' .$row["city_kana"] .'</td>';
+		print'<td>' .$row["town_kana"] .'</td>';
+		print'<td>' .$row["prefecture"] .'</td>';
+		print'<td>' .$row["city"] .'</td>';
+		print'<td>' .$row["town"] .'</td>';
 
 		if ($row["town_double_zip_code"] = 1 )
 		{
@@ -144,9 +152,34 @@ EOT;
 
 ?>
 
-<form action="kadai4_3update.php" method="post">
-<!-- <input type="submit" value="更新申請"> -->
+<INPUT TYPE="button" onClick="chBxOn();" VALUE="全て選択">
+<INPUT TYPE="button" onClick="chBxOff();" VALUE="全て未選択"><BR><BR>
+
+<input type="submit" value="削除申請">
 </form>
 
+<SCRIPT type="text/javascript">
+//フォームオブジェクトの配列の個数の取得
+var chn = document.nForm.elements.length;
+console.log(chn);
+
+ // 全てのチェックボックをチェックする
+function chBxOn()
+{
+   for(i=0; i<chn.length; i++)
+	{
+     document.nForm.elements[chn[i]].checked = true;
+	}
+}
+
+ // 全てのチェックボックのチェックを外す
+function chBxOff()
+{
+   for(i=0; i<chn.length; i++)
+	{
+     document.nForm.elements[chn[i]].checked = false;
+	}
+}
+</SCRIPT>
 </body>
 </html>
