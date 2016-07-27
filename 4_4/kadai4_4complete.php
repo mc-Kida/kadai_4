@@ -10,11 +10,12 @@
 </head>
 <body>
 <?php
-//検索によるデータ牽引
+//検索によるデータ削除
 require_once 'db4_4.php';
 $search = mysql_query("SELECT * FROM kadai_kida_ziplist WHERE zip_code = $data");
 $row = mysql_fetch_array($search);
 
+$delete = 
 
 $result = mysql_query('SET NAMES utf8', $link);
 if (!$result) {

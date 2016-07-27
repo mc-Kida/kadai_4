@@ -1,5 +1,5 @@
 <?php
-	var_dump($_POST);
+	var_dump($_POST[]);
 ?>
 <!DOCTYPE html>
 <html>
@@ -10,22 +10,23 @@
 <body>
 <form action="kadai4_4list.php" method="post">
 <?php
-$data = $_POST['selectrow'];
+$data = $_POST['checkbox[]'];
 // フォームからPOSTデータを受け取った場合
-if( isset($_POST['selectrow']) )
+if( isset($_POST['checkbox[]']) )
 {
 	//検索によるデータ牽引
 	require_once 'db4_4.php';
 	$search = mysql_query("SELECT * FROM kadai_kida_ziplist WHERE zip_code = $data");
 	$row = mysql_fetch_array($search);
 
+	echo "$data";
 
 
-	$chks = $_POST['selectrow'];
-	// $chks = $_POST['selectrow[]']; と書くと間違いなので注意
+	$chks = $_POST['checkbox'];
+	// $chks = $_POST['checkbox[]']; と書くと間違いなので注意
 
 	print "<p>削除したいのは・・・<br />\n";
-	foreach( (array)$chks as $c )
+	foreach( (array)$search as $c )
 	{
 		// formから受け取ったcheckboxのデータは配列になっています。
 		// よって、foreachなどを使って

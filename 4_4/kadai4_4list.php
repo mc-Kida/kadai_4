@@ -17,6 +17,10 @@ if (!$result)
 <meta charset="utf-8">
 </head>
 <body>
+
+<?php if(isset($_POST)){var_dump($_POST);};?>
+
+<form name="nForm" action="" method="post">
 <?php
 	//検索結果の全体表示
 	print <<<EOT
@@ -40,17 +44,14 @@ if (!$result)
 	<th>更新理由</th>
 	</tr>
 EOT;
-	?>
-
-<form name="nForm" action="kadai4_4deletecheck.php" method="post">
-	<?php
 
 	while ($row = mysql_fetch_array($result))
 	{
 		$ZC = $row["zip_code"];
-		$Zlink = "<a href='http://localhost/kadai/kadai_4/4_3/kadai4_3update.php?data=$ZC'>".$row["zip_code"]."</a>";
+		$Zlink = "<a href='http://localhost/kadai/kadai_4/4_4/kadai4_4deletecheck.php?data=$ZC'>".$row["zip_code"]."</a>";
+
 		print"<tr>";
-		print'<td>'."<input type='checkbox' name='selectrow' value='$ZC'>".'</td>';  //☑設置
+		print'<td>'."<input type='checkbox' name='checkbox' value='$ZC'>".'</td>';  //☑設置
 		print'<td>' .$row["public_group_code"] .'</td>';
 		print'<td>' .$row["zip_code_old"] .'</td>';
 		print'<td>' .$Zlink .'</td>';
@@ -134,12 +135,13 @@ EOT;
 		{
 			print'<td>'.("訂正  ").'</td>';
 		}
-		else
+		else{
 
 			print'<td>'.("廃止  ").'</td>';
 		}
+	}
 
-		print'</tr>';
+	print'</tr>';
 
 	print "</table>";
 
@@ -152,34 +154,25 @@ EOT;
 
 ?>
 
-<INPUT TYPE="button" onClick="chBxOn();" VALUE="全て選択">
-<INPUT TYPE="button" onClick="chBxOff();" VALUE="全て未選択"><BR><BR>
+<INPUT TYPE="button" onClick="chBxSw(true);" VALUE="全て選択">
+<INPUT TYPE="button" onClick="chBxSw(false);" VALUE="全て未選択"><BR><BR>
 
 <input type="submit" value="削除申請">
 </form>
 
 <SCRIPT type="text/javascript">
 //フォームオブジェクトの配列の個数の取得
-var chn = document.nForm.elements.length;
-console.log(chn);
+var i;
 
  // 全てのチェックボックをチェックする
-function chBxOn()
+function chBxSw(sw)
 {
-   for(i=0; i<chn.length; i++)
+   for(i=0; i<document.nForm.checkbox.length; i++)
 	{
-     document.nForm.elements[chn[i]].checked = true;
+	   document.nForm.checkbox[i].checked = sw;
 	}
 }
 
- // 全てのチェックボックのチェックを外す
-function chBxOff()
-{
-   for(i=0; i<chn.length; i++)
-	{
-     document.nForm.elements[chn[i]].checked = false;
-	}
-}
 </SCRIPT>
 </body>
 </html>
